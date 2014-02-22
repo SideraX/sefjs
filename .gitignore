@@ -50,3 +50,5 @@ publish
 build/buildinfo.properties
 build/config/buildinfo.properties
 
+# Node
+node_modules

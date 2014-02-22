@@ -3,6 +3,18 @@ declare module Sef {
     }
 }
 declare module Sef {
+    /**
+    * Return the next typeId
+    *
+    * @return {number}
+    */
+    function nextComponentTypeId(): number;
+    function componentTypeId(c: any): number;
+}
+declare module "Sef" {
+    export = Sef;
+}
+declare module Sef {
     class World {
         private _systems;
         private _entities;
@@ -56,13 +68,4 @@ declare module Sef {
         public hasComponents(components: Sef.Component[]): boolean;
         public get(componentType: any): Sef.Component;
     }
-}
-declare module Sef {
-    /**
-    * Return the next typeId
-    *
-    * @return {number}
-    */
-    function nextComponentTypeId(): number;
-    function componentTypeId(c: any): number;
 }

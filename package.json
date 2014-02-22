@@ -10,5 +10,14 @@
   },
   "authors": {
     "name": "SideraX"
+  },
+  "devDependencies": {
+    "gulp-util": "~2.2.14",
+    "gulp": "~3.5.2",
+    "gulp-tsc": "~0.2.0",
+    "gulp-clean": "~0.2.4",
+    "gulp-uglify": "~0.2.1",
+    "gulp-notify": "~1.0.0-beta",
+    "gulp-rename": "~1.1.0"
   }
 }

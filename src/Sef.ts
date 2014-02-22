@@ -40,3 +40,7 @@ module Sef {
     }
 }
 
+
+declare module "Sef" {
+    export = Sef;
+}

@@ -10,6 +10,44 @@ var Sef;
 ///<reference path="Entity.ts" />
 ///<reference path="Component.ts" />
 ///<reference path="System.ts" />
+///<reference path="World.ts" />
+var Sef;
+(function (Sef) {
+    /**
+    * Next typeId for component (inheritance)
+    *
+    * @type {number}
+    */
+    var _nextComponentTypeId = 0;
+
+    /**
+    * Return the next typeId
+    *
+    * @return {number}
+    */
+    function nextComponentTypeId() {
+        return _nextComponentTypeId++;
+    }
+    Sef.nextComponentTypeId = nextComponentTypeId;
+
+    function componentTypeId(c) {
+        if (typeof c === 'function') {
+            if (c.typeId === undefined)
+                c.typeId = nextComponentTypeId();
+
+            return c.typeId;
+        }
+
+        if (c.constructor.typeId === undefined)
+            c.constructor.typeId = nextComponentTypeId();
+
+        return c.constructor.typeId;
+    }
+    Sef.componentTypeId = componentTypeId;
+})(Sef || (Sef = {}));
+///<reference path="Entity.ts" />
+///<reference path="Component.ts" />
+///<reference path="System.ts" />
 ///<reference path="Sef.ts" />
 var Sef;
 (function (Sef) {
@@ -138,42 +176,4 @@ var Sef;
         return Entity;
     })();
     Sef.Entity = Entity;
-})(Sef || (Sef = {}));
-///<reference path="Entity.ts" />
-///<reference path="Component.ts" />
-///<reference path="System.ts" />
-///<reference path="World.ts" />
-var Sef;
-(function (Sef) {
-    /**
-    * Next typeId for component (inheritance)
-    *
-    * @type {number}
-    */
-    var _nextComponentTypeId = 0;
-
-    /**
-    * Return the next typeId
-    *
-    * @return {number}
-    */
-    function nextComponentTypeId() {
-        return _nextComponentTypeId++;
-    }
-    Sef.nextComponentTypeId = nextComponentTypeId;
-
-    function componentTypeId(c) {
-        if (typeof c === 'function') {
-            if (c.typeId === undefined)
-                c.typeId = nextComponentTypeId();
-
-            return c.typeId;
-        }
-
-        if (c.constructor.typeId === undefined)
-            c.constructor.typeId = nextComponentTypeId();
-
-        return c.constructor.typeId;
-    }
-    Sef.componentTypeId = componentTypeId;
 })(Sef || (Sef = {}));
