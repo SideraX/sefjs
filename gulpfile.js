@@ -12,7 +12,7 @@ gulp.task('typescript', function() {
     .pipe(gulp.dest('build/'));
 });
 
-gulp.task('javascript', ['typescript'], function() {
+gulp.task('scripts', ['typescript'], function() {
   return gulp.src(['build/Sef.js'])
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
@@ -25,6 +25,10 @@ gulp.task('clean', function() {
 });
 
 gulp.task('default', ['clean'], function() {
-    gulp.start('typescript', 'javascript');
+    gulp.start('typescript', 'scripts');
 });
 
+gulp.task('watch', function() {
+  // Watch .ts files
+  gulp.watch('src/**/*.ts', ['typescript', 'scripts']);
+});
