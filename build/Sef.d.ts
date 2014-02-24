@@ -3,16 +3,21 @@ declare module Sef {
     }
 }
 declare module Sef {
-    /**
-    * Return the next typeId
-    *
-    * @return {number}
-    */
-    function nextComponentTypeId(): number;
-    function componentTypeId(c: any): number;
-}
-declare module "Sef" {
-    export = Sef;
+    class Util {
+        /**
+        * Next typeId for component (inheritance)
+        *
+        * @type {number}
+        */
+        private static _nextComponentTypeId;
+        /**
+        * Return the next typeId
+        *
+        * @return {number}
+        */
+        static nextComponentTypeId(): number;
+        static componentTypeId(c: any): number;
+    }
 }
 declare module Sef {
     class World {

@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 
 gulp.task('typescript', function() {
   return gulp.src(['src/**/*.ts'])
-    .pipe(typescript({ module: 'commonjs', out: 'Sef.js', declaration: true }))
+    .pipe(typescript({ out: 'Sef.js', declaration: true, target: 'ES5' }))
     .pipe(gulp.dest('build/'));
 });
 
@@ -30,5 +30,5 @@ gulp.task('default', ['clean'], function() {
 
 gulp.task('watch', function() {
   // Watch .ts files
-  gulp.watch('src/**/*.ts', ['typescript', 'scripts']);
+  gulp.watch('src/**/*.ts', ['default']);
 });

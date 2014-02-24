@@ -1,7 +1,7 @@
 ///<reference path="Entity.ts" />
 ///<reference path="Component.ts" />
 ///<reference path="World.ts" />
-///<reference path="Sef.ts" />
+///<reference path="Util.ts" />
 
 module Sef {
 
@@ -12,7 +12,7 @@ module Sef {
 
         public registerComponent(c: any) {
 
-            this._components.push(componentTypeId(c));
+            this._components.push(Util.componentTypeId(c));
         }
 
         public refreshEntity(e: Entity) {

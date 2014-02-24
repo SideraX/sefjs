@@ -1,7 +1,7 @@
 ///<reference path="Component.ts" />
 ///<reference path="System.ts" />
 ///<reference path="World.ts" />
-///<reference path="Sef.ts" />
+///<reference path="Util.ts" />
 
 
 module Sef {
@@ -25,7 +25,7 @@ module Sef {
          * @param {Component}
          */
         public add(c: Component) {
-            this._components[componentTypeId(c)] = c;
+            this._components[Util.componentTypeId(c)] = c;
 
             this._world.refresh(this);
 
@@ -38,7 +38,7 @@ module Sef {
          * @param {Component}
          */
         public remove(c: Component) {
-            this._components[componentTypeId(c)] = undefined;
+            this._components[Util.componentTypeId(c)] = undefined;
 
             this._world.refresh(this);
 
@@ -54,7 +54,7 @@ module Sef {
         public hasComponents(components: Component[]) {
             for (var i = components.length - 1; i >= 0; i--) {
 
-                return (this._components[componentTypeId(components[i])] !== undefined);
+                return (this._components[Util.componentTypeId(components[i])] !== undefined);
             }
 
             return true;
@@ -62,7 +62,7 @@ module Sef {
 
         public get(componentType: any) {
 
-            return this._components[componentTypeId(componentType)];
+            return this._components[Util.componentTypeId(componentType)];
         }
     }
 }

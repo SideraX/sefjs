@@ -1,7 +1,7 @@
 ///<reference path="Entity.ts" />
 ///<reference path="Component.ts" />
 ///<reference path="System.ts" />
-///<reference path="Sef.ts" />
+///<reference path="Util.ts" />
 
 module Sef {
 

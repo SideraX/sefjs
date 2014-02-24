@@ -7,48 +7,42 @@ var Sef;
     })();
     Sef.Component = Component;
 })(Sef || (Sef = {}));
-///<reference path="Entity.ts" />
-///<reference path="Component.ts" />
-///<reference path="System.ts" />
-///<reference path="World.ts" />
 var Sef;
 (function (Sef) {
-    /**
-    * Next typeId for component (inheritance)
-    *
-    * @type {number}
-    */
-    var _nextComponentTypeId = 0;
-
-    /**
-    * Return the next typeId
-    *
-    * @return {number}
-    */
-    function nextComponentTypeId() {
-        return _nextComponentTypeId++;
-    }
-    Sef.nextComponentTypeId = nextComponentTypeId;
-
-    function componentTypeId(c) {
-        if (typeof c === 'function') {
-            if (c.typeId === undefined)
-                c.typeId = nextComponentTypeId();
-
-            return c.typeId;
+    var Util = (function () {
+        function Util() {
         }
+        /**
+        * Return the next typeId
+        *
+        * @return {number}
+        */
+        Util.nextComponentTypeId = function () {
+            return Util._nextComponentTypeId++;
+        };
 
-        if (c.constructor.typeId === undefined)
-            c.constructor.typeId = nextComponentTypeId();
+        Util.componentTypeId = function (c) {
+            if (typeof c === 'function') {
+                if (c.typeId === undefined)
+                    c.typeId = Util.nextComponentTypeId();
 
-        return c.constructor.typeId;
-    }
-    Sef.componentTypeId = componentTypeId;
+                return c.typeId;
+            }
+
+            if (c.constructor.typeId === undefined)
+                c.constructor.typeId = Util.nextComponentTypeId();
+
+            return c.constructor.typeId;
+        };
+        Util._nextComponentTypeId = 0;
+        return Util;
+    })();
+    Sef.Util = Util;
 })(Sef || (Sef = {}));
 ///<reference path="Entity.ts" />
 ///<reference path="Component.ts" />
 ///<reference path="System.ts" />
-///<reference path="Sef.ts" />
+///<reference path="Util.ts" />
 var Sef;
 (function (Sef) {
     var World = (function () {
@@ -91,7 +85,7 @@ var Sef;
 ///<reference path="Entity.ts" />
 ///<reference path="Component.ts" />
 ///<reference path="World.ts" />
-///<reference path="Sef.ts" />
+///<reference path="Util.ts" />
 var Sef;
 (function (Sef) {
     var System = (function () {
@@ -100,7 +94,7 @@ var Sef;
             this._entities = [];
         }
         System.prototype.registerComponent = function (c) {
-            this._components.push(Sef.componentTypeId(c));
+            this._components.push(Sef.Util.componentTypeId(c));
         };
 
         System.prototype.refreshEntity = function (e) {
@@ -120,7 +114,7 @@ var Sef;
 ///<reference path="Component.ts" />
 ///<reference path="System.ts" />
 ///<reference path="World.ts" />
-///<reference path="Sef.ts" />
+///<reference path="Util.ts" />
 var Sef;
 (function (Sef) {
     var Entity = (function () {
@@ -135,7 +129,7 @@ var Sef;
         * @param {Component}
         */
         Entity.prototype.add = function (c) {
-            this._components[Sef.componentTypeId(c)] = c;
+            this._components[Sef.Util.componentTypeId(c)] = c;
 
             this._world.refresh(this);
 
@@ -148,7 +142,7 @@ var Sef;
         * @param {Component}
         */
         Entity.prototype.remove = function (c) {
-            this._components[Sef.componentTypeId(c)] = undefined;
+            this._components[Sef.Util.componentTypeId(c)] = undefined;
 
             this._world.refresh(this);
 
@@ -163,14 +157,14 @@ var Sef;
         */
         Entity.prototype.hasComponents = function (components) {
             for (var i = components.length - 1; i >= 0; i--) {
-                return (this._components[Sef.componentTypeId(components[i])] !== undefined);
+                return (this._components[Sef.Util.componentTypeId(components[i])] !== undefined);
             }
 
             return true;
         };
 
         Entity.prototype.get = function (componentType) {
-            return this._components[Sef.componentTypeId(componentType)];
+            return this._components[Sef.Util.componentTypeId(componentType)];
         };
         Entity._nextId = 0;
         return Entity;
