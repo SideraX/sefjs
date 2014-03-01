@@ -1,9 +1,3 @@
-///<reference path="Component.ts" />
-///<reference path="System.ts" />
-///<reference path="World.ts" />
-///<reference path="Util.ts" />
-
-
 module Sef {
 
     export class Entity {

@@ -8,7 +8,7 @@ var gulp = require('gulp'),
 
 gulp.task('typescript', function() {
   return gulp.src(['src/**/*.ts'])
-    .pipe(typescript({ out: 'Sef.js', declaration: true, target: 'ES5' }))
+    .pipe(typescript({ out: 'Sef.js', declaration: true, target: 'ES5', sourcemap: true }))
     .pipe(gulp.dest('build/'));
 });
 
