@@ -1,35 +1,49 @@
 module Sef {
 
     export class World {
-        private _systems: System[] = [];
-        private _entities: Entity[] = [];
+        public systems: System[] = [];
+        public entities: Entity[] = [];
 
         /**
          * Register a system
          *
          * @param {system} System
          */
-        public setSystem(system: System) {
-            this._systems.push(system);
+        public setSystem(system: System): void {
+            this.systems.push(system);
         }
 
         /**
          * Create a new Entity
          */
-        public createEntity() {
+        public createEntity(): Entity {
             var e = new Entity(this);
 
-            this._entities.push(e);
+            this.entities.push(e);
 
             return e;
         }
 
-        public refresh(e: Entity) {
-            var systems = this._systems;
+        /**
+         * [refresh description]
+         */
+        public refresh(e: Entity): void {
+            var systems = this.systems;
 
             for (var i = systems.length - 1; i >= 0; i--) {
                 systems[i].refreshEntity(e);
-            };
+            }
+        }
+
+        /**
+         * [refresh description]
+         */
+        public process(): void {
+            var systems = this.systems;
+
+            for (var i = systems.length - 1; i >= 0; i--) {
+                systems[i].process();
+            }
         }
     }
 }

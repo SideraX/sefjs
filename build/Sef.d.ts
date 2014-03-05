@@ -21,13 +21,14 @@ declare module Sef {
         * @param {Component}
         */
         public remove(c: Sef.Component): Entity;
+        public hasComponent(c: any): boolean;
         /**
         * [hasComponents description]
         *
         * @param {Component[]}
         * @return {boolean}
         */
-        public hasComponents(components: Sef.Component[]): boolean;
+        public hasComponents(components: number[]): boolean;
         public get(componentType: any): Sef.Component;
     }
 }
@@ -50,17 +51,18 @@ declare module Sef {
 }
 declare module Sef {
     class System {
-        private _components;
-        private _entities;
+        public components: number[];
+        public entities: Sef.Entity[];
         public registerComponent(c: any): void;
         public refreshEntity(e: Sef.Entity): void;
-        public update(): void;
+        public process(): void;
+        public update(e: Sef.Entity): void;
     }
 }
 declare module Sef {
     class World {
-        private _systems;
-        private _entities;
+        public systems: Sef.System[];
+        public entities: Sef.Entity[];
         /**
         * Register a system
         *
@@ -71,6 +73,13 @@ declare module Sef {
         * Create a new Entity
         */
         public createEntity(): Sef.Entity;
+        /**
+        * [refresh description]
+        */
         public refresh(e: Sef.Entity): void;
+        /**
+        * [refresh description]
+        */
+        public process(): void;
     }
 }

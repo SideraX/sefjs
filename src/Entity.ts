@@ -39,16 +39,23 @@ module Sef {
             return this;
         }
 
+        public hasComponent(c: any): boolean {
+            return (this._components[Util.componentTypeId(c)] !== undefined);
+        }
+
         /**
          * [hasComponents description]
          *
          * @param {Component[]}
          * @return {boolean}
          */
-        public hasComponents(components: Component[]) {
+        public hasComponents(components: number[]) {
+            if (components.length === 0)
+                return false;
+
             for (var i = components.length - 1; i >= 0; i--) {
 
-                return (this._components[Util.componentTypeId(components[i])] !== undefined);
+                return (this._components[components[i]] !== undefined);
             }
 
             return true;

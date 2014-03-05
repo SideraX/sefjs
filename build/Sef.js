@@ -41,6 +41,10 @@ var Sef;
             return this;
         };
 
+        Entity.prototype.hasComponent = function (c) {
+            return (this._components[Sef.Util.componentTypeId(c)] !== undefined);
+        };
+
         /**
         * [hasComponents description]
         *
@@ -48,8 +52,11 @@ var Sef;
         * @return {boolean}
         */
         Entity.prototype.hasComponents = function (components) {
+            if (components.length === 0)
+                return false;
+
             for (var i = components.length - 1; i >= 0; i--) {
-                return (this._components[Sef.Util.componentTypeId(components[i])] !== undefined);
+                return (this._components[components[i]] !== undefined);
             }
 
             return true;
@@ -99,22 +106,29 @@ var Sef;
 (function (Sef) {
     var System = (function () {
         function System() {
-            this._components = [];
-            this._entities = [];
+            this.components = [];
+            this.entities = [];
         }
         System.prototype.registerComponent = function (c) {
-            this._components.push(Sef.Util.componentTypeId(c));
+            this.components.push(Sef.Util.componentTypeId(c));
         };
 
         System.prototype.refreshEntity = function (e) {
-            if (e.hasComponents(this._components)) {
-                this._entities[e.id] = e;
-            } else if (this._entities[e.id]) {
-                this._entities[e.id] = undefined;
+            console.log(e.hasComponents(this.components));
+            if (e.hasComponents(this.components)) {
+                this.entities[e.id] = e;
+            } else if (this.entities[e.id]) {
+                this.entities[e.id] = undefined;
             }
         };
 
-        System.prototype.update = function () {
+        System.prototype.process = function () {
+            for (var i = this.entities.length - 1; i >= 0; i--) {
+                this.update(this.entities[i]);
+            }
+        };
+
+        System.prototype.update = function (e) {
         };
         return System;
     })();
@@ -124,8 +138,8 @@ var Sef;
 (function (Sef) {
     var World = (function () {
         function World() {
-            this._systems = [];
-            this._entities = [];
+            this.systems = [];
+            this.entities = [];
         }
         /**
         * Register a system
@@ -133,7 +147,7 @@ var Sef;
         * @param {system} System
         */
         World.prototype.setSystem = function (system) {
-            this._systems.push(system);
+            this.systems.push(system);
         };
 
         /**
@@ -142,18 +156,31 @@ var Sef;
         World.prototype.createEntity = function () {
             var e = new Sef.Entity(this);
 
-            this._entities.push(e);
+            this.entities.push(e);
 
             return e;
         };
 
+        /**
+        * [refresh description]
+        */
         World.prototype.refresh = function (e) {
-            var systems = this._systems;
+            var systems = this.systems;
 
             for (var i = systems.length - 1; i >= 0; i--) {
                 systems[i].refreshEntity(e);
             }
-            ;
+        };
+
+        /**
+        * [refresh description]
+        */
+        World.prototype.process = function () {
+            var systems = this.systems;
+
+            for (var i = systems.length - 1; i >= 0; i--) {
+                systems[i].process();
+            }
         };
         return World;
     })();

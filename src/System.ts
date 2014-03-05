@@ -2,24 +2,31 @@ module Sef {
 
     export class System {
 
-        private _components: Component[] = [];
-        private _entities: Entity[] = [];
+        public components: number[] = [];
+        public entities: Entity[] = [];
 
-        public registerComponent(c: any) {
+        public registerComponent(c: any): void {
 
-            this._components.push(Util.componentTypeId(c));
+            this.components.push(Util.componentTypeId(c));
         }
 
-        public refreshEntity(e: Entity) {
-            if (e.hasComponents(this._components)) {
-                this._entities[e.id] = e;
+        public refreshEntity(e: Entity): void {
+            console.log(e.hasComponents(this.components));
+            if (e.hasComponents(this.components)) {
+                this.entities[e.id] = e;
             }
-            else if (this._entities[e.id]) {
-                this._entities[e.id] = undefined;
+            else if (this.entities[e.id]) {
+                this.entities[e.id] = undefined;
             }
         }
 
-        public update() {}
+        public process(): void {
+            for (var i = this.entities.length - 1; i >= 0; i--) {
+                this.update(this.entities[i]);
+            }
+        }
+
+        public update(e: Entity): void {}
 
     }
 }
