@@ -52,3 +52,4 @@ build/config/buildinfo.properties
 
 # Node
 node_modules
+build

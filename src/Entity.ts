@@ -49,16 +49,29 @@ module Sef {
          * @param {Component[]}
          * @return {boolean}
          */
-        public hasComponents(components: number[]) {
+        public hasAllComponents(components: number[]): boolean {
             if (components.length === 0)
                 return false;
 
             for (var i = components.length - 1; i >= 0; i--) {
-
-                return (this._components[components[i]] !== undefined);
+                if (this._components[components[i]] === undefined)
+                    return false;
             }
 
             return true;
+        }
+
+        public hasOneComponent(components: number[]): boolean {
+            if (components.length === 0)
+                return false;
+
+            for (var i = components.length - 1; i >= 0; i--) {
+                if (this._components[components[i]] !== undefined)
+                    return true;
+            }
+
+            return false;
+
         }
 
         public get(componentType: any) {
