@@ -4,18 +4,35 @@ var gulp = require('gulp'),
     uglify = require('gulp-uglify'),
     typescript = require('gulp-tsc'),
     rename = require('gulp-rename'),
+    concat = require('gulp-concat'),
     clean = require('gulp-clean');
 
 gulp.task('typescript', function() {
   return gulp.src(['src/**/*.ts'])
-    .pipe(typescript({ out: 'Sef.js', declaration: true, target: 'ES5', sourcemap: true }))
+    .pipe(typescript({ out: 'Sef.js', declaration: true, target: 'ES5' }))
     .pipe(gulp.dest('build/'));
 });
 
-gulp.task('scripts', ['typescript'], function() {
+gulp.task('scripts', ['common'], function() {
   return gulp.src(['build/Sef.js'])
     .pipe(rename({suffix: '.min'}))
     .pipe(uglify())
+    .pipe(gulp.dest('build/'));
+});
+
+gulp.task('common', ['typescript'], function() {
+  return gulp.src([
+      'build/Sef.js',
+      'common.js'
+    ])
+    .pipe(concat('Sef.js'))
+    .pipe(gulp.dest('build/'));
+});
+
+gulp.task('definition', ['common'], function() {
+  return gulp.src([
+      'Sef.common.d.ts'
+    ])
     .pipe(gulp.dest('build/'));
 });
 
@@ -25,7 +42,7 @@ gulp.task('clean', function() {
 });
 
 gulp.task('default', ['clean'], function() {
-    gulp.start('typescript', 'scripts');
+    gulp.start('typescript', 'common', 'definition', 'scripts');
 });
 
 gulp.task('watch', function() {
