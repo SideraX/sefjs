@@ -4,13 +4,14 @@ module Sef {
 
         private static _nextId: number = 0;
 
-        private _components: Component[] = [];
+        private _components: Hashmap;
 
         public id: number;
 
 
         constructor(private _world: World) {
             this.id = Entity._nextId++;
+            this._components = new Hashmap();
         }
 
         /**
@@ -19,7 +20,7 @@ module Sef {
          * @param {Component}
          */
         public add(c: Component) {
-            this._components[Util.componentTypeId(c)] = c;
+            this._components.add(Util.componentTypeId(c), c);
 
             this._world.refresh(this);
 
@@ -32,7 +33,7 @@ module Sef {
          * @param {Component}
          */
         public remove(c: Component) {
-            this._components[Util.componentTypeId(c)] = undefined;
+            this._components.remove(Util.componentTypeId(c));
 
             this._world.refresh(this);
 
@@ -40,7 +41,7 @@ module Sef {
         }
 
         public hasComponent(c: any): boolean {
-            return (this._components[Util.componentTypeId(c)] !== undefined);
+            return this._components.has(Util.componentTypeId(c));
         }
 
         /**
@@ -53,8 +54,8 @@ module Sef {
             if (components.length === 0)
                 return false;
 
-            for (var i = components.length - 1; i >= 0; i--) {
-                if (this._components[components[i]] === undefined)
+            for (var i = 0, max = components.length; i < max; i++){
+                if (this._components.has(components[i]) === false)
                     return false;
             }
 
@@ -65,8 +66,8 @@ module Sef {
             if (components.length === 0)
                 return false;
 
-            for (var i = components.length - 1; i >= 0; i--) {
-                if (this._components[components[i]] !== undefined)
+            for (var i = 0, max = components.length; i < max; i++){
+                if (this._components.has(components[i]))
                     return true;
             }
 
@@ -75,8 +76,7 @@ module Sef {
         }
 
         public get(componentType: any) {
-
-            return this._components[Util.componentTypeId(componentType)];
+            return this._components.getValue(Util.componentTypeId(componentType));
         }
     }
 }
