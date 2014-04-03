@@ -30,7 +30,7 @@ module Sef {
         public refresh(e: Entity): void {
             var systems = this.systems;
 
-            for (var i = systems.length - 1; i >= 0; i--) {
+            for (var i = 0, max = systems.length; i < max; i++){
                 systems[i].refreshEntity(e);
             }
         }
@@ -41,7 +41,7 @@ module Sef {
         public process(): void {
             var systems = this.systems;
 
-            for (var i = systems.length - 1; i >= 0; i--) {
+            for (var i = 0, max = systems.length; i < max; i++){
                 systems[i].process();
             }
         }
