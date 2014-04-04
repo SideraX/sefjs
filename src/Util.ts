@@ -40,4 +40,10 @@ module Sef {
 
     }
 
+    export function clearArray(array: any[]) {
+        while (array.length > 0) {
+          array.shift();
+        }
+    }
+
 }

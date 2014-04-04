@@ -72,12 +72,13 @@ module Sef {
          * [process description]
          */
         public process(): void {
-            var that = this;
+            var entities = this.entities.values;
 
-            this.entities.forEach(function(idEntity, e) {
-                that.update(e);
-            });
+            for (var i = 0, max = entities.length; i < max; i++){
+                this.update(entities[i]);
+            }
         }
+
 
         /**
          * [update description]

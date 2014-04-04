@@ -2,95 +2,76 @@ module Sef {
 
     export class Hashmap {
 
-        private _keys: any[];
-        private _values: any[];
+        public keys: any[];
+        public values: any[];
 
         constructor() {
-            this._keys = [];
-            this._values = [];
+            this.keys = [];
+            this.values = [];
         }
 
         public add(key, value): void {
             var keyIndex = this.getIndex(key);
             if (keyIndex >= 0) {
-                this._values[keyIndex] = value;
+                this.values[keyIndex] = value;
             } else {
-                this._keys.push(key);
-                this._values.push(value);
+                this.keys.push(key);
+                this.values.push(value);
             }
         }
 
         public remove(key): any {
             var keyIndex = this.getIndex(key);
             if (keyIndex >= 0) {
-                var removedValue = this._values[keyIndex];
-                this._keys.splice(keyIndex, 1);
-                this._values.splice(keyIndex, 1);
-                return removedValue;
-            } else {
-                throw "Key does not exist";
+                var keys = this.keys;
+                var values = this.values;
+
+                keys[keyIndex] = keys[keys.length - 1];
+                keys.pop();
+
+                values[keyIndex] = values[values.length - 1];
+                return values.pop();
             }
         }
 
         public getValue(key): any {
-            var value = null;
             var keyIndex = this.getIndex(key);
+
             if (keyIndex >= 0) {
-                value = this._values[keyIndex];
+                return this.values[keyIndex];
             }
-            return value;
+
+            return null;
         }
 
         public getIndex(testKey): number {
-            var i = 0,
-                len = this._keys.length,
-                key;
-            for (; i < len; ++i) {
-                key = this._keys[i];
-                if (key == testKey) {
+            var keys = this.keys;
+
+            for (var i = 0, max = keys.length; i < max; ++i){
+                if (testKey === keys[i])
                     return i;
-                }
             }
+
             return -1;
         }
 
         public has(testKey): boolean {
-            var i = 0,
-                len = this._keys.length,
-                key;
-            for (i; i < len; ++i) {
-                key = this._keys[i];
-                if (key == testKey) {
-                    return true;
-                }
+            var keyIndex = this.getIndex(testKey);
+            if (keyIndex >= 0) {
+                return true;
             }
             return false;
         }
 
-        public values(): any[] {
-            var i = 0,
-                len = this._keys.length,
-                key,
-                value;
-            var arValue: any[] = [];
-
-            for (; i < len; ++i) {
-                key = this._keys[i];
-                value = this._values[i];
-                arValue.push(value);
-            }
-            return arValue;
-        }
-
         public forEach(action): boolean {
             var i = 0,
-                len = this._keys.length,
+                len = this.keys.length,
                 key,
                 value;
 
             for (; i < len; ++i) {
-                key = this._keys[i];
-                value = this._values[i];
+                key = this.keys[i];
+                value = this.values[i];
                 action(key, value);
             }
             return true;
