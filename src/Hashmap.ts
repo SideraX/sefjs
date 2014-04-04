@@ -69,7 +69,7 @@ module Sef {
                 len = this._keys.length;
 
             for (; i < len; ++i) {
-                action(this._keys[i], his._values[i]);
+                action(this._keys[i], this._values[i]);
             }
             return true;
         }
