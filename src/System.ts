@@ -2,47 +2,62 @@ module Sef {
 
     export class System {
 
-        public components: number[];
         public entities: Hashmap;
 
-        private _all = false;
+        private _all: BitSet;
+        private _one: BitSet;
 
+        /**
+         * [constructor description]
+         */
         constructor() {
-            this.components = [];
             this.entities = new Hashmap();
         }
 
-        private registerComponent(c: any): void {
-            this.components.push(Util.componentTypeId(c));
-        }
-
+        /**
+         * [forAllComponents description]
+         * @param  {any[]}  ...components [description]
+         * @return {System}               [description]
+         */
         public forAllComponents(...components: any[]): System {
-            this._all = true;
+            this._all = new BitSet(Util.maxComponents);
 
             for (var i = 0, max = components.length; i < max; i++){
-                this.registerComponent(components[i]);
+                var type = Util.componentTypeId(components[i]);
+                this._all.set(type);
             }
 
             return this;
         }
 
+        /**
+         * [forOneComponent description]
+         * @param  {any[]}  ...components [description]
+         * @return {System}               [description]
+         */
         public forOneComponent(...components: any[]): System {
-            this._all = false;
+            this._one = new BitSet(Util.maxComponents);
 
             for (var i = 0, max = components.length; i < max; i++){
-                this.registerComponent(components[i]);
+                var type = Util.componentTypeId(components[i]);
+                this._one.set(type);
             }
 
             return this;
         }
 
+        /**
+         * [refreshEntity description]
+         * @param {Entity} e [description]
+         */
         public refreshEntity(e: Entity): void {
-            var eligible;
+            var eligible = false;
+
             if (this._all) {
-                eligible = e.hasAllComponents(this.components);
+                eligible = e.componentsMask.contains(this._all);
             }
-            else {
-                eligible = e.hasOneComponent(this.components);
+            else if (this._one) {
+                eligible = e.componentsMask.intersects(this._one);
             }
 
             if (eligible) {
@@ -53,6 +68,9 @@ module Sef {
             }
         }
 
+        /**
+         * [process description]
+         */
         public process(): void {
             var that = this;
 
@@ -61,6 +79,10 @@ module Sef {
             });
         }
 
+        /**
+         * [update description]
+         * @param {Entity} e [description]
+         */
         public update(e: Entity): void {}
 
     }

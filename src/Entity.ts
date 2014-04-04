@@ -5,6 +5,7 @@ module Sef {
         private static _nextId: number = 0;
 
         private _components: Hashmap;
+        public componentsMask: BitSet;
 
         public id: number;
 
@@ -12,6 +13,7 @@ module Sef {
         constructor(private _world: World) {
             this.id = Entity._nextId++;
             this._components = new Hashmap();
+            this.componentsMask = new BitSet(Util.maxComponents);
         }
 
         /**
@@ -20,7 +22,9 @@ module Sef {
          * @param {Component}
          */
         public add(c: Component) {
-            this._components.add(Util.componentTypeId(c), c);
+            var type = Util.componentTypeId(c);
+            this._components.add(type, c);
+            this.componentsMask.set(type);
 
             this._world.refresh(this);
 
@@ -33,7 +37,9 @@ module Sef {
          * @param {Component}
          */
         public remove(c: Component) {
-            this._components.remove(Util.componentTypeId(c));
+            var type = Util.componentTypeId(c);
+            this._components.remove(type);
+            this.componentsMask.clear(type);
 
             this._world.refresh(this);
 
@@ -41,38 +47,7 @@ module Sef {
         }
 
         public hasComponent(c: any): boolean {
-            return this._components.has(Util.componentTypeId(c));
-        }
-
-        /**
-         * [hasComponents description]
-         *
-         * @param {Component[]}
-         * @return {boolean}
-         */
-        public hasAllComponents(components: number[]): boolean {
-            if (components.length === 0)
-                return false;
-
-            for (var i = 0, max = components.length; i < max; i++){
-                if (this._components.has(components[i]) === false)
-                    return false;
-            }
-
-            return true;
-        }
-
-        public hasOneComponent(components: number[]): boolean {
-            if (components.length === 0)
-                return false;
-
-            for (var i = 0, max = components.length; i < max; i++){
-                if (this._components.has(components[i]))
-                    return true;
-            }
-
-            return false;
-
+            return this.componentsMask.get(Util.componentTypeId(c));
         }
 
         public get(componentType: any) {

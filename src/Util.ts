@@ -8,6 +8,8 @@ module Sef {
          */
         private static _nextComponentTypeId: number = 0;
 
+        public static maxComponents: number = 32;
+
         /**
          * Return the next typeId
          *
