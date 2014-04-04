@@ -26,11 +26,8 @@ module Sef {
                 var keys = this.keys;
                 var values = this.values;
 
-                keys[keyIndex] = keys[keys.length - 1];
-                keys.pop();
-
-                values[keyIndex] = values[values.length - 1];
-                return values.pop();
+                keys.splice(keyIndex, 1);
+                return values.splice(keyIndex, 1);
             }
         }
 
