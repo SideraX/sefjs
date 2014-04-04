@@ -2,47 +2,47 @@ module Sef {
 
     export class Hashmap {
 
-        public keys: any[];
-        public values: any[];
+        private _keys: any[];
+        private _values: any[];
 
         constructor() {
-            this.keys = [];
-            this.values = [];
+            this._keys = [];
+            this._values = [];
         }
 
-        public add(key, value): void {
-            var keyIndex = this.getIndex(key);
+        public set(key, value): void {
+            var keyIndex = this._getIndex(key);
             if (keyIndex >= 0) {
-                this.values[keyIndex] = value;
+                this._values[keyIndex] = value;
             } else {
-                this.keys.push(key);
-                this.values.push(value);
+                this._keys.push(key);
+                this._values.push(value);
             }
         }
 
-        public remove(key): any {
-            var keyIndex = this.getIndex(key);
+        public delete(key): any {
+            var keyIndex = this._getIndex(key);
             if (keyIndex >= 0) {
-                var keys = this.keys;
-                var values = this.values;
+                var keys = this._keys;
+                var values = this._values;
 
                 keys.splice(keyIndex, 1);
                 return values.splice(keyIndex, 1);
             }
         }
 
-        public getValue(key): any {
-            var keyIndex = this.getIndex(key);
+        public get(key): any {
+            var keyIndex = this._getIndex(key);
 
             if (keyIndex >= 0) {
-                return this.values[keyIndex];
+                return this._values[keyIndex];
             }
 
             return null;
         }
 
-        public getIndex(testKey): number {
-            var keys = this.keys;
+        private _getIndex(testKey): number {
+            var keys = this._keys;
 
             for (var i = 0, max = keys.length; i < max; ++i){
                 if (testKey === keys[i])
@@ -52,8 +52,12 @@ module Sef {
             return -1;
         }
 
+        public values(): any[] {
+            return this._values;
+        }
+
         public has(testKey): boolean {
-            var keyIndex = this.getIndex(testKey);
+            var keyIndex = this._getIndex(testKey);
             if (keyIndex >= 0) {
                 return true;
             }
@@ -62,14 +66,10 @@ module Sef {
 
         public forEach(action): boolean {
             var i = 0,
-                len = this.keys.length,
-                key,
-                value;
+                len = this._keys.length;
 
             for (; i < len; ++i) {
-                key = this.keys[i];
-                value = this.values[i];
-                action(key, value);
+                action(this._keys[i], his._values[i]);
             }
             return true;
         }

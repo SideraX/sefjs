@@ -23,7 +23,7 @@ module Sef {
          */
         public add(c: Component) {
             var type = Util.componentTypeId(c);
-            this._components.add(type, c);
+            this._components.set(type, c);
             this.componentsMask.set(type);
 
             this._world.refresh(this);
@@ -38,7 +38,7 @@ module Sef {
          */
         public remove(c: Component) {
             var type = Util.componentTypeId(c);
-            this._components.remove(type);
+            this._components.delete(type);
             this.componentsMask.clear(type);
 
             this._world.refresh(this);
@@ -51,7 +51,7 @@ module Sef {
         }
 
         public get(componentType: any) {
-            return this._components.getValue(Util.componentTypeId(componentType));
+            return this._components.get(Util.componentTypeId(componentType));
         }
     }
 }

@@ -61,10 +61,10 @@ module Sef {
             }
 
             if (eligible) {
-                this.entities.add(e.id, e);
+                this.entities.set(e.id, e);
             }
             else if (this.entities.has(e.id)) {
-                this.entities.remove(e.id);
+                this.entities.delete(e.id);
             }
         }
 
@@ -72,7 +72,7 @@ module Sef {
          * [process description]
          */
         public process(): void {
-            var entities = this.entities.values;
+            var entities = this.entities.values();
 
             for (var i = 0, max = entities.length; i < max; i++){
                 this.update(entities[i]);
