@@ -23,11 +23,8 @@ module Sef {
         public delete(key): any {
             var keyIndex = this._getIndex(key);
             if (keyIndex >= 0) {
-                var keys = this._keys;
-                var values = this._values;
-
-                keys.splice(keyIndex, 1);
-                return values.splice(keyIndex, 1);
+                this._values.splice(keyIndex, 1);
+                return this._keys.splice(keyIndex, 1);
             }
         }
 
