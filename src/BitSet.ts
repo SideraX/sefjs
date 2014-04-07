@@ -1,53 +1,55 @@
-/**
- * Inspired by https://github.com/speedr/makrjs/blob/master/src/makr/BitSet.js
- */
+
 module Sef {
 
   export class BitSet {
 
-    public length: number;
+    public BITS_OF_A_WORD: number = 32;
+    public SHIFTS_OF_A_WORD: number = 5;
+
     public words: number[];
 
-    constructor(size: number) {
+    constructor() {
+      this.words = [];
+    }
 
-      this.length = Math.ceil(size / 32);
-      this.words = new Array(this.length);
+    public length(): number {
+      return this.words.length;
+    }
 
-      for (var i = 0; i < this.length; i++){
-          this.words[i] = 0;
-      }
+    public whichWord(index: number): number {
+        return index >> this.SHIFTS_OF_A_WORD;
+    }
+
+    public mask(index: number): number {
+        return 1 << (index & 31);
     }
 
     public set(index: number): void {
-      var wordsOffset = index / 32 | 0;
-      var bitOffset = index - wordsOffset * 32;
+      var which = this.whichWord(index);
+      var words = this.words;
 
-      this.words[wordsOffset] |= 1 << bitOffset;
+      words[which] = words[which] | this.mask(index);
     }
 
     public clear(index: number): void {
-      var wordsOffset = index / 32 | 0;
-      var bitOffset = index - wordsOffset * 32;
+      var which = this.whichWord(index);
+      var words = this.words;
 
-      this.words[wordsOffset] &= ~(1 << bitOffset);
+      words[which] = words[which] & ~this.mask(index)
     }
 
     public get(index: number): boolean {
-      var wordsOffset = index / 32 | 0;
-      var bitOffset = index - wordsOffset * 32;
+      var which = this.whichWord(index);
+      var words = this.words;
 
-      return !!(this.words[wordsOffset] & (1 << bitOffset));
+      return !!(words[which] & this.mask(index));
     }
 
     public contains(bSet : BitSet): boolean {
       var words = this.words;
-      var l = this.length;
+      var commons = Math.min(words.length, bSet.length());
 
-      if (l !== bSet.length) {
-        return false;
-      }
-
-      for (var i = 0; i < l; i++) {
+      for (var i = 0; i < commons; i++) {
         if ((words[i] & bSet.words[i]) !== bSet.words[i]) {
           return false;
         }
@@ -58,13 +60,9 @@ module Sef {
 
     public intersects(bSet : BitSet): boolean {
       var words = this.words;
-      var l = this.length;
+      var commons = Math.min(words.length, bSet.length());
 
-      if (l !== bSet.length) {
-        return false;
-      }
-
-      for(var i = 0; i < l; i++) {
+      for (var i = 0; i < commons; i++) {
         if ((words[i] & bSet.words[i]) === bSet.words[i]) {
           return true;
         }

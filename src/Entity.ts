@@ -13,7 +13,7 @@ module Sef {
         constructor(private _world: World) {
             this.id = Entity._nextId++;
             this._components = new Hashmap();
-            this.componentsMask = new BitSet(Util.maxComponents);
+            this.componentsMask = new BitSet();
         }
 
         /**

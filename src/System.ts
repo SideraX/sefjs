@@ -20,7 +20,7 @@ module Sef {
          * @return {System}               [description]
          */
         public forAllComponents(...components: any[]): System {
-            this._all = new BitSet(Util.maxComponents);
+            this._all = new BitSet();
 
             for (var i = 0, max = components.length; i < max; i++){
                 var type = Util.componentTypeId(components[i]);
@@ -36,7 +36,7 @@ module Sef {
          * @return {System}               [description]
          */
         public forOneComponent(...components: any[]): System {
-            this._one = new BitSet(Util.maxComponents);
+            this._one = new BitSet();
 
             for (var i = 0, max = components.length; i < max; i++){
                 var type = Util.componentTypeId(components[i]);
