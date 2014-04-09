@@ -4,6 +4,13 @@ module Sef {
         public systems: System[] = [];
         public entities: Entity[] = [];
 
+        public time: number;
+        public delta: number;
+
+        constructor() {
+            this.time = Date.now();
+        }
+
         /**
          * Register a system
          *
@@ -41,6 +48,10 @@ module Sef {
          * [refresh description]
          */
         public process(): void {
+            var now = Date.now();
+            this.delta = now - this.time;
+            this.time = now;
+
             var systems = this.systems;
 
             for (var i = 0, max = systems.length; i < max; i++){
