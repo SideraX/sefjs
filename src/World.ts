@@ -10,7 +10,9 @@ module Sef {
          * @param {system} System
          */
         public setSystem(system: System): void {
+            system.world = this;
             this.systems.push(system);
+            system.init();
         }
 
         /**

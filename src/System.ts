@@ -7,12 +7,16 @@ module Sef {
         private _all: BitSet;
         private _one: BitSet;
 
+        public world: World;
+
         /**
          * [constructor description]
          */
         constructor() {
             this.entities = new Hashmap();
         }
+
+        public init(): void {}
 
         /**
          * [forAllComponents description]
