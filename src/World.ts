@@ -1,14 +1,17 @@
 module Sef {
 
     export class World {
-        public systems: System[] = [];
-        public entities: Entity[] = [];
+        public systems: System[];
+        public entities: Entity[];
 
         public time: number;
         public delta: number;
 
         constructor() {
             this.time = Date.now();
+
+            this.systems = [];
+            this.entities = [];
         }
 
         /**
@@ -17,8 +20,9 @@ module Sef {
          * @param {system} System
          */
         public setSystem(system: System): void {
-            system.world = this;
             this.systems.push(system);
+
+            system.world = this;
             system.init();
         }
 

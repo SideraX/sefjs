@@ -2,29 +2,31 @@ module Sef {
 
     export class IntervalSystem extends System {
 
-        public delta: number;
+        public acc: number;
         /**
          * [constructor description]
          */
         constructor(public interval = 100) {
             super();
 
-            this.delta = 0;
+            this.acc = 0;
         }
 
         /**
          * [process description]
          */
         public process(): void {
-            this.delta += this.world.delta;
+            var interval = this.interval;
 
-            if (this.delta < this.interval) {
+            this.acc += this.world.delta;
+
+
+            if (this.acc < interval) {
                 return;
             }
 
+            this.acc -= interval;
             super.process();
-
-            this.delta = 0;
         }
 
 
