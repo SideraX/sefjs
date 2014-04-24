@@ -1,5 +1,7 @@
 module Sef {
 
-    export class Component {}
+    export interface Component {
+        typeId : number;
+    }
 }
 

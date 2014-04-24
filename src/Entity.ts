@@ -21,8 +21,8 @@ module Sef {
          *
          * @param {Component}
          */
-        public add(c: Component) {
-            var type = Util.componentTypeId(c);
+        public add<T extends Component>(c: T) {
+            var type = ComponentManager.typeId(c);
             this._components.set(type, c);
             this.componentsMask.set(type);
 
@@ -36,8 +36,8 @@ module Sef {
          *
          * @param {Component}
          */
-        public remove(c: Component) {
-            var type = Util.componentTypeId(c);
+        public remove<T extends Component>(c: T) {
+            var type = ComponentManager.typeId(c);
             this._components.delete(type);
             this.componentsMask.clear(type);
 
@@ -46,12 +46,12 @@ module Sef {
             return this;
         }
 
-        public hasComponent(c: any): boolean {
-            return this.componentsMask.get(Util.componentTypeId(c));
+        public hasComponent<T extends Component>(c: T): boolean {
+            return this.componentsMask.get(ComponentManager.typeId(c));
         }
 
-        public get(componentType: any) {
-            return this._components.get(Util.componentTypeId(componentType));
+        public get<T extends Component>(componentType: T) {
+            return this._components.get(ComponentManager.typeId(componentType));
         }
     }
 }

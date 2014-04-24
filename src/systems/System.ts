@@ -27,7 +27,7 @@ module Sef {
             this._all = new BitSet();
 
             for (var i = 0, max = components.length; i < max; i++){
-                var type = Util.componentTypeId(components[i]);
+                var type = ComponentManager.typeId(components[i]);
                 this._all.set(type);
             }
 
@@ -43,7 +43,7 @@ module Sef {
             this._one = new BitSet();
 
             for (var i = 0, max = components.length; i < max; i++){
-                var type = Util.componentTypeId(components[i]);
+                var type = ComponentManager.typeId(components[i]);
                 this._one.set(type);
             }
 
