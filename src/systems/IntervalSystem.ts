@@ -16,16 +16,14 @@ module Sef {
          * [process description]
          */
         public process(): void {
-            var interval = this.interval;
-
             this.acc += this.world.delta;
 
 
-            if (this.acc < interval) {
+            if (this.acc < this.interval) {
                 return;
             }
 
-            this.acc -= interval;
+            this.acc -= this.interval;
             super.process();
         }
 
