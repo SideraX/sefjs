@@ -11,7 +11,7 @@ module Sef {
 
         public static maxComponents: number = 32;
 
-        public static register<T extends Component>(c: T): void {
+        public static register(c: any): void {
             if (typeof c !== 'function') {
                 return;
             }
