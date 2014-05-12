@@ -4,25 +4,29 @@ module Sef {
 
         private _keys: any[];
         private _values: any[];
+        private _index: any;
 
         constructor() {
             this._keys = [];
             this._values = [];
+            this._index = {};
         }
 
         public set(key, value): void {
             var keyIndex = this._getIndex(key);
+
             if (keyIndex >= 0) {
                 this._values[keyIndex] = value;
             } else {
-                this._keys.push(key);
                 this._values.push(value);
+                this._index[key] = this._keys.push(key) - 1;
             }
         }
 
         public delete(key): any {
             var keyIndex = this._getIndex(key);
             if (keyIndex >= 0) {
+                delete this._index[key];
                 this._values.splice(keyIndex, 1);
                 return this._keys.splice(keyIndex, 1);
             }
@@ -39,11 +43,8 @@ module Sef {
         }
 
         private _getIndex(testKey): number {
-            var keys = this._keys;
-
-            for (var i = 0, max = keys.length; i < max; ++i){
-                if (testKey === keys[i])
-                    return i;
+            if (this._index[testKey] !== undefined) {
+                return this._index[testKey];
             }
 
             return -1;
@@ -65,7 +66,7 @@ module Sef {
             var i = 0,
                 len = this._keys.length;
 
-            for (; i < len; ++i) {
+            for (; i < len; i++) {
                 action(this._keys[i], this._values[i]);
             }
             return true;
@@ -73,4 +74,3 @@ module Sef {
 
     }
 }
-
