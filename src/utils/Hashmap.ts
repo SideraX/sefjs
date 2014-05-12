@@ -50,6 +50,10 @@ module Sef {
             return -1;
         }
 
+        public keys(): any[] {
+            return this._keys;
+        }
+
         public values(): any[] {
             return this._values;
         }
