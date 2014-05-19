@@ -8,6 +8,8 @@ module Sef {
         private _one: BitSet;
 
         public world: World;
+        public delta: number = 0;
+        public time: number = 0;
 
         /**
          * [constructor description]
@@ -75,7 +77,10 @@ module Sef {
         /**
          * [process description]
          */
-        public process(): void {
+        public process(time: number, delta: number): void {
+            this.time = time;
+            this.delta = delta;
+
             var entities = this.entities.values();
 
             for (var i = 0, max = entities.length; i < max; i++){

@@ -15,8 +15,8 @@ module Sef {
         /**
          * [process description]
          */
-        public process(): void {
-            this.acc += this.world.delta;
+        public process(time: number, delta: number): void {
+            this.acc += delta;
 
 
             if (this.acc < this.interval) {
@@ -24,7 +24,7 @@ module Sef {
             }
 
             this.acc -= this.interval;
-            super.process();
+            super.process(time, delta);
         }
 
 

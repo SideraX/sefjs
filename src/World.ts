@@ -6,7 +6,7 @@ module Sef {
         public entities: Entity[] = [];
 
         public time: number = Date.now();
-        public delta: number;
+        public timeAnimFrame: number = Date.now();
 
         constructor(public interval: number = 50) {}
 
@@ -60,21 +60,25 @@ module Sef {
          */
         public process(): void {
             var now = Date.now();
-            this.delta = now - this.time;
+            var delta = now - this.time;
             this.time = now;
-            
+
             var systems = this.systems;
 
             for (var i = 0, max = systems.length; i < max; i++){
-                systems[i].process();
+                systems[i].process(this.time, delta);
             }
         }
 
         public processAnimFrame(): void {
+            var now = Date.now();
+            var delta = now - this.timeAnimFrame;
+            this.timeAnimFrame = now;
+
             var systems = this.systemsAnimFrame;
 
             for (var i = 0, max = systems.length; i < max; i++){
-                systems[i].process();
+                systems[i].process(this.timeAnimFrame, delta);
             }
         }
 
