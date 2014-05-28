@@ -38,7 +38,7 @@ module Sef {
          */
         public remove(c: any) {
             var type = ComponentManager.typeId(c);
-            this._components.delete(type);
+            this._components.remove(type);
             this.componentsMask.clear(type);
 
             this._world.refresh(this);

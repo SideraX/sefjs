@@ -70,7 +70,7 @@ module Sef {
                 this.entities.set(e.id, e);
             }
             else if (this.entities.has(e.id)) {
-                this.entities.delete(e.id);
+                this.entities.remove(e.id);
             }
         }
 

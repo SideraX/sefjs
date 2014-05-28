@@ -23,7 +23,7 @@ module Sef {
             }
         }
 
-        public delete(key): any {
+        public remove(key): any {
             var keyIndex = this._getIndex(key);
             if (keyIndex >= 0) {
                 delete this._index[key];
