@@ -116,10 +116,13 @@ module Sef {
             }
         }
 
-        public start(): void {
-
+        public startAnimFrame(): void {
             if (typeof this.renderingSystem === 'undefined') {
                 throw new Error('World.renderingSystem is not set.');
+            }
+
+            if (this.systemsAnimFrame.length === 0) {
+                return;
             }
 
             var processAnimFrame = () => {
@@ -127,12 +130,23 @@ module Sef {
                 this.processAnimFrame();
             }
             processAnimFrame();
+        }
+
+        public startSetTimeout(): void {
+            if (this.systemsSetTimeouts.length === 0) {
+                return;
+            }
 
             var processSetTimeout = () => {
                 setTimeout(processSetTimeout, this.fixedStep);
                 this.processSetTimeout();
             }
             processSetTimeout();
+        }
+
+        public start(): void {
+            this.startAnimFrame();
+            this.startSetTimeout();
         }
     }
 }
