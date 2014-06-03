@@ -3,7 +3,8 @@ module Sef {
     export class World {
         public systemsSetTimeout: System[] = [];
         public systemsAnimFrame: System[] = [];
-        public renderingSystem: System;
+        public systemsPassive: System[] = [];
+
 
         public entities: Entity[] = [];
 
@@ -20,8 +21,11 @@ module Sef {
          *
          * @param {system} System
          */
-        public setSystem(system: System, requestAnimFrame: boolean = true): void {
-            if (requestAnimFrame) {
+        public setSystem(system: System, passive: boolean = false, requestAnimFrame: boolean = true): System {
+            if (passive) {
+                this.systemsPassive.push(system);
+            }
+            else if (requestAnimFrame) {
                 this.systemsAnimFrame.push(system);
             }
             else {
@@ -30,13 +34,8 @@ module Sef {
 
             system.world = this;
             system.init();
-        }
 
-        public setRenderingSystem(system: System): void {
-            this.renderingSystem = system;
-
-            system.world = this;
-            system.init();
+            return system;
         }
 
         /**
@@ -66,15 +65,17 @@ module Sef {
                 this.systemsAnimFrame[i].refreshEntity(e);
             }
 
-            if (this.renderingSystem) {
-                this.renderingSystem.refreshEntity(e);
+            l = this.systemsPassive.length;
+            for (i = 0; i < l; i++){
+                this.systemsPassive[i].refreshEntity(e);
             }
+
         }
 
         /**
          * [refresh description]
          */
-        public processSetTimeout(): void {
+        public processSetTimeout(fn?): void {
             var now = Date.now();
             var delta = now - this.timeSetTimeout;
             delta = Math.min(delta, this.maxInterval);
@@ -83,10 +84,14 @@ module Sef {
 
             var systems = this.systemsSetTimeout;
 
-            this.logicWorldLoop(systems, this.timeSetTimeout, delta);
+            this.loop(systems, this.timeSetTimeout, delta);
+
+            if (typeof fn === 'function') {
+                fn(this.timeSetTimeout, delta);
+            }
         }
 
-        public processAnimFrame(): void {
+        public processAnimFrame(fn?): void {
             var now = Date.now();
             var delta = now - this.timeAnimFrame;
             delta = Math.min(delta, this.maxInterval);
@@ -95,12 +100,14 @@ module Sef {
 
             var systems = this.systemsAnimFrame;
 
-            this.logicWorldLoop(systems, this.timeAnimFrame, delta);
-            this.renderingSystem.process(this.timeAnimFrame, delta);
+            this.loop(systems, this.timeAnimFrame, delta);
 
+            if (typeof fn === 'function') {
+                fn(this.timeAnimFrame, delta);
+            }
         }
 
-        public logicWorldLoop(systems: System[], time: number, delta: number): void {
+        public loop(systems: System[], time: number, delta: number): void {
             if (systems.length === 0) {
                 return;
             }
@@ -116,37 +123,29 @@ module Sef {
             }
         }
 
-        public startAnimFrame(): void {
-            if (typeof this.renderingSystem === 'undefined') {
-                throw new Error('World.renderingSystem is not set.');
-            }
-
+        public startAnimFrame(fn?): void {
             if (this.systemsAnimFrame.length === 0) {
                 return;
             }
 
             var processAnimFrame = () => {
                 requestAnimationFrame(processAnimFrame);
-                this.processAnimFrame();
+                this.processAnimFrame(fn);
             }
             processAnimFrame();
         }
 
-        public startSetTimeout(): void {
-            if (this.systemsSetTimeouts.length === 0) {
+        public startSetTimeout(fn?): void {
+            if (this.systemsSetTimeout.length === 0) {
                 return;
             }
 
             var processSetTimeout = () => {
                 setTimeout(processSetTimeout, this.fixedStep);
-                this.processSetTimeout();
+                this.processSetTimeout(fn);
             }
             processSetTimeout();
         }
 
-        public start(): void {
-            this.startAnimFrame();
-            this.startSetTimeout();
-        }
     }
 }
