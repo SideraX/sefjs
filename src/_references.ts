@@ -5,4 +5,5 @@
 ///<reference path="ComponentManager.ts" />
 ///<reference path="Entity.ts" />
 ///<reference path="systems/System.ts" />
+///<reference path="systems/IntervalSystem.ts" />
 ///<reference path="World.ts" />
