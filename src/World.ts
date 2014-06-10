@@ -14,6 +14,9 @@ module Sef {
         public fixedStep: number = 1 / 60 * 1000; //60Hz;
         public maxInterval: number = 1 / 20 * 1000; //20hz;
 
+        private static _nextSystemType: number = 0;
+        private systems: Hashmap = new Hashmap();
+
         constructor() {}
 
         /**
@@ -32,10 +35,23 @@ module Sef {
                 this.systemsSetTimeout.push(system);
             }
 
+            var type = World._nextSystemType++;
+            system.constructor['type'] = type;
+            this.systems.set(type, system);
+
             system.world = this;
             system.init();
 
             return system;
+        }
+
+        /**
+         * [getSystem description]
+         * @param  {[type]} systemType [description]
+         * @return {System}            [description]
+         */
+        public getSystem(systemType): System {
+            return this.systems.get(systemType.type);
         }
 
         /**
