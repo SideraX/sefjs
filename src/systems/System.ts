@@ -6,6 +6,7 @@ module Sef {
 
         private _all: BitSet;
         private _one: BitSet;
+        private _exclude: BitSet;
 
         public world: World;
         public delta: number = 0;
@@ -28,8 +29,9 @@ module Sef {
         public forAllComponents(...components: any[]): System {
             this._all = new BitSet();
 
+            var type: number;
             for (var i = 0, max = components.length; i < max; i++){
-                var type = ComponentManager.typeId(components[i]);
+                type = ComponentManager.typeId(components[i]);
                 this._all.set(type);
             }
 
@@ -44,9 +46,22 @@ module Sef {
         public forOneComponent(...components: any[]): System {
             this._one = new BitSet();
 
+            var type: number;
             for (var i = 0, max = components.length; i < max; i++){
-                var type = ComponentManager.typeId(components[i]);
+                type = ComponentManager.typeId(components[i]);
                 this._one.set(type);
+            }
+
+            return this;
+        }
+
+        public excludeComponents(...components: any[]): System {
+            this._exclude = new BitSet();
+
+            var type: number;
+            for (var i = 0, max = components.length; i < max; i++){
+                type = ComponentManager.typeId(components[i]);
+                this._exclude.set(type);
             }
 
             return this;
@@ -57,16 +72,19 @@ module Sef {
          * @param {Entity} e [description]
          */
         public refreshEntity(e: Entity): void {
-            var eligible = false;
+            var interested = true;
 
             if (this._all) {
-                eligible = e.componentsMask.contains(this._all);
+                interested = e.componentsMask.contains(this._all);
             }
-            else if (this._one) {
-                eligible = e.componentsMask.intersects(this._one);
+            if (interested && this._exclude) {
+                interested = !e.componentsMask.intersects(this._exclude);
+            }
+            if (interested && this._one) {
+                interested = e.componentsMask.intersects(this._one);
             }
 
-            if (eligible) {
+            if (interested) {
                 this.entities.set(e.id, e);
             }
             else if (this.entities.has(e.id)) {
