@@ -63,7 +63,7 @@ module Sef {
       var commons = Math.min(words.length, bSet.length());
 
       for (var i = 0; i < commons; i++) {
-        if ((words[i] & bSet.words[i]) === bSet.words[i]) {
+        if ((words[i] & bSet.words[i]) !== 0) {
           return true;
         }
       }
