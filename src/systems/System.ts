@@ -12,6 +12,8 @@ module Sef {
         public delta: number = 0;
         public time: number = 0;
 
+        private _systemsInstance: {type: any; variable: string}[] = [];
+
         /**
          * [constructor description]
          */
@@ -19,7 +21,23 @@ module Sef {
             this.entities = new Hashmap();
         }
 
-        public init(): void {}
+        /**
+         * [init description]
+         */
+        public init(): void {
+            for (var i = 0, max = this._systemsInstance.length; i < max; i++){
+                this[this._systemsInstance[i].variable] = this.world.getSystem(this._systemsInstance[i].type);
+            }
+        }
+
+        /**
+         * [getSystemInstance description]
+         * @param {any}    systemType [description]
+         * @param {string} variable   [description]
+         */
+        public getSystemInstance(systemType: any, variable: string) {
+            this._systemsInstance.push({type: systemType, variable: variable});
+        }
 
         /**
          * [forAllComponents description]
