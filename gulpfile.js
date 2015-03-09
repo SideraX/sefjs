@@ -1,16 +1,28 @@
 var gulp = require('gulp'),
     gutil = require('gulp-util'),
-    notify = require('gulp-notify'),
     uglify = require('gulp-uglify'),
-    typescript = require('gulp-tsc'),
+    ts = require('gulp-typescript'),
     rename = require('gulp-rename'),
     concat = require('gulp-concat'),
-    clean = require('gulp-clean');
+    merge = require('merge2'),
+    del = require('del');
 
 gulp.task('typescript', function() {
-  return gulp.src(['src/**/*.ts'])
-    .pipe(typescript({ out: 'Sef.js', declaration: true, target: 'ES5' }))
-    .pipe(gulp.dest('build/'));
+  var tsResult = gulp.src(['src/**/*.ts'])
+    .pipe(ts({
+      sortOutput: true,
+      declarationFiles: true,
+      noExternalResolve: true
+    }));
+    return merge([
+        tsResult.dts
+          .pipe(concat('Sef.d.ts'))
+          .pipe(gulp.dest('build')),
+        tsResult.js
+          .pipe(concat('Sef.js'))
+          .pipe(gulp.dest('build'))
+      ]
+    );
 });
 
 gulp.task('scripts', ['common'], function() {
@@ -37,8 +49,7 @@ gulp.task('definition', ['common'], function() {
 });
 
 gulp.task('clean', function() {
-  return gulp.src(['build'], {read: false})
-    .pipe(clean());
+  return del(['build/*'])
 });
 
 gulp.task('default', ['clean'], function() {
