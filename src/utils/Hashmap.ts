@@ -43,11 +43,7 @@ module Sef {
         }
 
         private _getIndex(testKey): number {
-            if (this._index[testKey] !== undefined) {
-                return this._index[testKey];
-            }
-
-            return -1;
+            return this._keys.indexOf(testKey);
         }
 
         public keys(): any[] {
